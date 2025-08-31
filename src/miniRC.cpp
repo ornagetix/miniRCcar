@@ -1,37 +1,59 @@
 #include <Arduino.h> // arduino core library
 #include <ESP32Servo.h> // servo class
 #include <WiFi.h> // wifi library
+//#include <WebServer.h> // web server library
 
-#define in1 D0
-#define in2 D1
-#define servo_pin D2
+// define motor pins and PWM channels
+#define in1 2
+#define in2 3
+#define motorFreq 5000
+#define motorRes 8
+
+// setup motor and servo pins
+#define servo_pin 4
+
+// setup WiFi credentials
+const char* ssid     = "miniRCcar";
+const char* password = "screwdriver123";
+
+// set web server port
+//WebServer server(80);
 
 // creates servo object for servo (to attach servo & use methods)
 Servo servo;
 
-void setup() {
-  // put your setup code here, to run once:
+// function prototype(s)
+void setMotor(int speed);
 
-  // initialize motor pins
-  pinMode(in1, OUTPUT);
-  pinMode(in2, OUTPUT);
+void setup() {
+  // starts serial monitor
+  Serial.begin(115200);
+
+  // initialize motor PWM channels
+  ledcSetup(in1, motorFreq, motorRes);
+  ledcSetup(in2, motorFreq, motorRes);
+  ledcAttachPin(in1, in1);
+  ledcAttachPin(in2, in2);
 
   // initialize servo pin
   servo.attach(servo_pin);
   // reset servo to zero
   servo.write(0);
 
-  // starts serial monitor
-  Serial.begin(9600);
+  // start wifi connection in AP mode
+  /*
+  WiFi.softAP(ssid, password);
+  Serial.println("Access Point Started");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.softAPIP());
+  */
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  // MOTOR TEST CODE
-  analogWrite(in1, 255);
-  digitalWrite(in2, LOW);
 
-  // SERVO TEST CODE
+  // motor and servo test code
+  setMotor(255);
   servo.write(50);
   delay(1000);
   servo.write(90);
@@ -44,14 +66,14 @@ void loop() {
 
 void setMotor(int speed) {
   if (speed > 0 && speed <= 255) {
-    analogWrite(in1, speed);
-    digitalWrite(in2, LOW);
+    ledcWrite(in1, speed);
+    ledcWrite(in2, 0);;
   } else if (speed < 0 && speed >= -255) {
-    digitalWrite(in1, LOW);
-    analogWrite(in2, speed);
+    ledcWrite(in1, 0);
+    ledcWrite(in2, speed);
   } else if (speed == 0) {
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, LOW);
+    ledcWrite(in1, 0);
+    ledcWrite(in2, 0);
   } else {
     Serial.println("invalid speed");
   }
