@@ -1,4 +1,7 @@
+#include <Arduino.h> // arduino core library
 #include <ESP32Servo.h> // servo class
+#include <WiFi.h> // wifi library
+
 #define in1 D0
 #define in2 D1
 #define servo_pin D2
