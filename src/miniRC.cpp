@@ -24,6 +24,7 @@ Servo servo;
 
 // function prototype(s)
 void setMotor(int speed);
+void testLoop();
 
 void setup() {
   // starts serial monitor
@@ -64,16 +65,8 @@ void setup() {
 }
 
 void loop() {
-  // motor and servo test code
-  setMotor(255);
-  servo.write(50);
-  delay(1000);
-  servo.write(90);
-  delay(1000);
-  servo.write(120);
-  delay(1000);
-  servo.write(90);
-  delay(1000);
+  // method to test motor and servo
+  testLoop();
 }
 
 void setMotor(int speed) {
@@ -90,3 +83,16 @@ void setMotor(int speed) {
     Serial.println("invalid speed");
   }
 }
+
+void testLoop() {
+  // motor and servo test code
+  setMotor(255);
+  servo.write(50);
+  delay(1000);
+  servo.write(90);
+  delay(1000);
+  servo.write(120);
+  delay(1000);
+  servo.write(90);
+  delay(1000);
+} 
