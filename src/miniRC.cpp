@@ -1,7 +1,7 @@
 #include <Arduino.h> // arduino core library
 #include <ESP32Servo.h> // servo class
 #include <WiFi.h> // wifi library
-//#include <WebServer.h> // web server library
+#include <WebServer.h> // web server library
 
 // define motor pins and PWM channels
 #define in1 2
@@ -17,7 +17,7 @@ const char* ssid     = "miniRCcar";
 const char* password = "screwdriver123";
 
 // set web server port
-//WebServer server(80);
+WebServer server(80);
 
 // creates servo object for servo (to attach servo & use methods)
 Servo servo;
@@ -40,18 +40,30 @@ void setup() {
   // reset servo to zero
   servo.write(0);
 
-  // start wifi connection in AP mode
-  /*
+  // start wifi access point (AP) connection mode
+  Serial.println("Starting Access Point...");
   WiFi.softAP(ssid, password);
+
   Serial.println("Access Point Started");
   Serial.print("IP address: ");
-  Serial.println(WiFi.softAPIP());
-  */
+  IPAddress apIP = WiFi.softAPIP();
+  Serial.println(apIP);
+
+  // start and display wifi connection in terminal
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+
+  Serial.println("Connected to the WiFi network");
+  Serial.print("IP address: ");
+  IPAddress localIP = WiFi.localIP();
+  Serial.println(localIP);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
   // motor and servo test code
   setMotor(255);
   servo.write(50);
