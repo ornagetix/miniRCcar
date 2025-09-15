@@ -69,6 +69,13 @@ void loop() {
   testLoop();
 }
 
+/*
+  sets motor speed and direction
+  speed range: -255 to 255
+  negative speed = reverse direction
+  positive speed = forward direction
+  zero speed = stop motor
+*/
 void setMotor(int speed) {
   if (speed > 0 && speed <= 255) {
     ledcWrite(in1, speed);
