@@ -1,7 +1,8 @@
 #include <Arduino.h> // arduino core library
 #include <ESP32Servo.h> // servo class
 #include <WiFi.h> // wifi library
-#include <WebServer.h> // web server library
+#include <AsyncTCP.h> // async tcp library
+#include <ESPAsyncWebServer.h> // websocket web server library
 
 // define motor pins and PWM channels
 #define in1 2
@@ -16,8 +17,9 @@
 const char* ssid     = "miniRCcar";
 const char* password = "screwdriver123";
 
-// set web server port
-WebServer server(80);
+// set web server/socket on port 80
+AsyncWebServer server(80);
+AsyncWebSocket ws("/ws");
 
 // creates servo object for servo (to attach servo & use methods)
 Servo servo;
@@ -40,33 +42,11 @@ void setup() {
   servo.attach(servo_pin);
   // reset servo to zero
   servo.write(0);
-
-  // start wifi access point (AP) connection mode
-  Serial.println("Starting Access Point...");
-  WiFi.softAP(ssid, password);
-
-  Serial.println("Access Point Started");
-  Serial.print("IP address: ");
-  IPAddress apIP = WiFi.softAPIP();
-  Serial.println(apIP);
-
-  // start and display wifi connection in terminal
-  WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
-  }
-
-  Serial.println("Connected to the WiFi network");
-  Serial.print("IP address: ");
-  IPAddress localIP = WiFi.localIP();
-  Serial.println(localIP);
 }
 
 void loop() {
   // method to test motor and servo
-  testLoop();
+  //testLoop();
 }
 
 /*
@@ -79,7 +59,7 @@ void loop() {
 void setMotor(int speed) {
   if (speed > 0 && speed <= 255) {
     ledcWrite(in1, speed);
-    ledcWrite(in2, 0);;
+    ledcWrite(in2, 0);
   } else if (speed < 0 && speed >= -255) {
     ledcWrite(in1, 0);
     ledcWrite(in2, speed);
@@ -88,6 +68,15 @@ void setMotor(int speed) {
     ledcWrite(in2, 0);
   } else {
     Serial.println("invalid speed");
+  }
+}
+
+// sets the servo/steering angle
+void steerAngle(int angle) {
+  if (angle >= 0 && angle <= 180) {
+    servo.write(angle);
+  } else {
+    Serial.println("invalid angle");
   }
 }
 
