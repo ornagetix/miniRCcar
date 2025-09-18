@@ -42,6 +42,13 @@ void setup() {
   servo.attach(servo_pin);
   // reset servo to zero
   servo.write(0);
+
+  // setup access point
+  Serial.println("Setting up car access point...");
+  WiFi.softAP(ssid, password);
+  Serial.println("Car access point started");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.softAPIP());
 }
 
 void loop() {
