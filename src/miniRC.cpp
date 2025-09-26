@@ -28,6 +28,7 @@ void setup() {
   // starts serial monitor
   Serial.begin(115200);
   Serial.println("Test print");
+  delay(1000);
 
   // initialize motor PWM channels
   ledcSetup(in1, motorFreq, motorRes);
