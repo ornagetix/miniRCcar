@@ -17,10 +17,6 @@
 const char* ssid     = "miniRCcar";
 const char* password = "screwdriver123";
 
-// set web server/socket on port 80
-AsyncWebServer server(80);
-AsyncWebSocket ws("/ws");
-
 // creates servo object for servo (to attach servo & use methods)
 Servo servo;
 
@@ -31,6 +27,7 @@ void testLoop();
 void setup() {
   // starts serial monitor
   Serial.begin(115200);
+  Serial.println("Test print");
 
   // initialize motor PWM channels
   ledcSetup(in1, motorFreq, motorRes);
@@ -44,16 +41,18 @@ void setup() {
   servo.write(0);
 
   // setup access point
+  /*
   Serial.println("Setting up car access point...");
   WiFi.softAP(ssid, password);
   Serial.println("Car access point started");
   Serial.print("IP address: ");
   Serial.println(WiFi.softAPIP());
+  */
 }
 
 void loop() {
   // method to test motor and servo
-  //testLoop();
+  testLoop();
 }
 
 /*
