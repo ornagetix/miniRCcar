@@ -27,11 +27,11 @@ void testLoop();
 void setup() {
   // starts serial monitor
   Serial.begin(115200);
-  Serial.println("Test print");
-  delay(1000);
+  delay(5000); // Give time for serial monitor to connect
 
   // initialize motor PWM channels
   ledcSetup(in1, motorFreq, motorRes);
+
   ledcSetup(in2, motorFreq, motorRes);
   ledcAttachPin(in1, in1);
   ledcAttachPin(in2, in2);
@@ -39,20 +39,28 @@ void setup() {
   // initialize servo pin
   servo.attach(servo_pin);
   // reset servo to zero
-  servo.write(0);
+  servo.write(50);
 
   // setup access point
-  /*
+  Serial.println("5s wait for media & serial connection..."); // wait for serial monitor to connect via USB
   Serial.println("Setting up car access point...");
   WiFi.softAP(ssid, password);
-  Serial.println("Car access point started");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.softAPIP());
-  */
+  Serial.println("Car access point started!\n");
 }
 
+bool infoPrinted = false; // value to ensure info is printed only once
 void loop() {
-  // method to test motor and servo
+  // print access point info only once
+  if (!infoPrinted) {
+    //delay(5000); // wait for access point to initialize
+    Serial.print("Car SSID: ");
+    Serial.println(WiFi.softAPSSID());
+    Serial.print("Car IPv4 address: ");
+    Serial.println(WiFi.softAPIP());
+    infoPrinted = true;
+  }
+
+  // motor and servo test code looped
   testLoop();
 }
 
