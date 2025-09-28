@@ -1,8 +1,11 @@
 #include <Arduino.h> // arduino core library
 #include <ESP32Servo.h> // servo class
+
 #include <WiFi.h> // wifi library
 #include <AsyncTCP.h> // async tcp library
 #include <ESPAsyncWebServer.h> // websocket web server library
+
+#include <LittleFS.h> // littlefs file system library
 
 // define motor pins and PWM channels
 #define in1 2
@@ -17,17 +20,30 @@
 const char* ssid     = "miniRCcar";
 const char* password = "screwdriver123";
 
+// setup web socket
+AsyncWebServer server(80); // web server on port 80
+AsyncWebSocket ws("/ws"); // websocket endpoint (path is /ws)
+
 // creates servo object for servo (to attach servo & use methods)
 Servo servo;
 
-// function prototype(s)
+// function prototypes
 void setMotor(int speed);
+void steerAngle(int angle);
 void testLoop();
 
 void setup() {
   // starts serial monitor
   Serial.begin(115200);
   delay(5000); // Give time for serial monitor to connect
+  Serial.println("5s wait for media & serial connection..."); // wait for serial monitor to connect via USB
+
+  // setup LittleFS file system
+  if(!LittleFS.begin()){
+    Serial.println("An error has occurred while mounting LittleFS");
+    return;
+  }
+  Serial.println("LittleFS mounted successfully");
 
   // initialize motor PWM channels
   ledcSetup(in1, motorFreq, motorRes);
@@ -40,12 +56,26 @@ void setup() {
   servo.attach(servo_pin);
   // reset servo to zero
   servo.write(50);
-
+  
   // setup access point
-  Serial.println("5s wait for media & serial connection..."); // wait for serial monitor to connect via USB
   Serial.println("Setting up car access point...");
   WiFi.softAP(ssid, password);
   Serial.println("Car access point started!\n");
+}
+
+// websocket event handler
+// handles events like connect, disconnect, and sending motor & servo commands
+void onWSEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len){
+  if(type == WS_EVT_CONNECT){
+    Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+  } else if(type == WS_EVT_DISCONNECT){
+    Serial.printf("WebSocket client #%u disconnected\n", client->id());
+  } else if(type == WS_EVT_DATA){
+    // motor and servo control code
+    
+    // echo the received message back to the client
+    client->text((char*)data);
+  }
 }
 
 bool infoPrinted = false; // value to ensure info is printed only once
