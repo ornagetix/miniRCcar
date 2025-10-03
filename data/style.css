@@ -1,0 +1,22 @@
+body { 
+    font-family: sans-serif; text-align: center; 
+}
+
+#joystick {
+    width: 250px;
+    height: 250px;
+    background: #eee;
+    border-radius: 50%;
+    margin: 40px auto;
+    position: relative;
+    touch-action: none;
+}
+#stick {
+    width: 135px;
+    height: 135px;
+    background: #ff7700; 
+    border-radius: 50%;
+    position: absolute;
+    top: 57.5px; 
+    left: 57.5px;
+}
