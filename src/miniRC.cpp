@@ -67,7 +67,7 @@ void setup() {
   
   // setup access point
   Serial.println("Setting up car access point...");
-  WiFi.softAP(ssid, password);
+  WiFi.softAP(ssid, password, 1, 0, 1);
   Serial.println("Car access point started!\n");
 
   // add web files from /data folder to LittleFS
@@ -110,9 +110,6 @@ void onWSEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
 
       // print values in serial monitor
       Serial.printf("throttle: %d, angle: %d\n", motorSpeed, servoAngle);
-
-      // echo the same message back to the client for confirmation
-      client->text((char*)data);
       break;
   }
 }
