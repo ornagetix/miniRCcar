@@ -5,7 +5,7 @@ const ws = new WebSocket(`ws://${window.location.hostname}/ws`);
 const joystick = document.getElementById("joystick");
 const stick = document.getElementById("stick");
 const joystickRadius = 125; // joystick radius
-const stickRadius = 90;     // stick movement limit
+const stickRadius = 90; // stick movement limit
 
 const throttleDisplay = document.getElementById("throttle");
 const steerAngleDisplay = document.getElementById("steerAngle");
@@ -15,25 +15,26 @@ let rect = joystick.getBoundingClientRect();
 let centerX = rect.width / 2;
 let centerY = rect.height / 2;
 
-// Convert x,y into throttle + steering
+// convert joystick x,y into throttle + steering
 function sendCommand(x, y) {
     let throttle = Math.round((y / stickRadius) * 255);  // -255 to +255
     let steerAngle = Math.round(85 + (x / stickRadius) * 35);   // 50 to 120
 
+    // send values to car via websocket as json
     ws.send(JSON.stringify({ throttle, steerAngle }));
 
     throttleDisplay.textContent = `Throttle: ${throttle}`;
     steerAngleDisplay.textContent = `Steering Angle: ${steerAngle}`;
 }
 
-// Reset stick to center
+// reset stick to center
 function resetStick() {
     stick.style.left = `${centerX - stick.offsetWidth / 2}px`;
     stick.style.top  = `${centerY - stick.offsetHeight / 2}px`;
     sendCommand(0,0);
 }
 
-// Handle movement
+// handles movement
 // clientX, clientY are the mouse/touch coordinates
 function handleMove(clientX, clientY) {
     const rect = joystick.getBoundingClientRect();

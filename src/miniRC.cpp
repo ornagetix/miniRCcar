@@ -33,7 +33,6 @@ AsyncWebSocket ws("/ws"); // websocket endpoint (path is /ws)
 // function prototypes
 void setThrottle(int speed);
 void setAngle(int angle);
-void testLoop();
 void onWSEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
 
 void setup() {
@@ -109,7 +108,7 @@ void onWSEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
       setThrottle(motorSpeed); // set motor speed
       setAngle(servoAngle); // set servo angle
 
-      // print values for debugging
+      // print values in serial monitor
       Serial.printf("throttle: %d, angle: %d\n", motorSpeed, servoAngle);
 
       // echo the same message back to the client for confirmation
