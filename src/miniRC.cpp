@@ -104,8 +104,8 @@ void onWSEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
       }
 
       // extract and set motor speed and servo angle from json
-      int motorSpeed = doc["motorSpeed"]; // get motor speed value
-      int servoAngle = doc["servoAngle"]; // get servo angle value
+      int motorSpeed = doc["throttle"]; // get motor speed value
+      int servoAngle = doc["steerAngle"]; // get servo angle value
       setThrottle(motorSpeed); // set motor speed
       setAngle(servoAngle); // set servo angle
 

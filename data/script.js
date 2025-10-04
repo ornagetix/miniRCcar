@@ -8,7 +8,7 @@ const joystickRadius = 125; // joystick radius
 const stickRadius = 90;     // stick movement limit
 
 const throttleDisplay = document.getElementById("throttle");
-const angleDisplay = document.getElementById("angle");
+const steerAngleDisplay = document.getElementById("steerAngle");
 
 // center position
 let rect = joystick.getBoundingClientRect();
@@ -17,11 +17,13 @@ let centerY = rect.height / 2;
 
 // Convert x,y into throttle + steering
 function sendCommand(x, y) {
-    let steering = Math.round(85 + (x / stickRadius) * 35);   // -90 to +90
     let throttle = Math.round((y / stickRadius) * 255);  // -255 to +255
-    ws.send(JSON.stringify({ throttle, steering }));
+    let steerAngle = Math.round(85 + (x / stickRadius) * 35);   // 50 to 120
+
+    ws.send(JSON.stringify({ throttle, steerAngle }));
+
     throttleDisplay.textContent = `Throttle: ${throttle}`;
-    angleDisplay.textContent = `Steering Angle: ${steering}`;
+    steerAngleDisplay.textContent = `Steering Angle: ${steerAngle}`;
 }
 
 // Reset stick to center
