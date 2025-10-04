@@ -17,8 +17,28 @@ let centerY = rect.height / 2;
 
 // convert joystick x,y into throttle + steering
 function sendCommand(x, y) {
-    let throttle = Math.round((y / stickRadius) * 255);  // -255 to +255
-    let steerAngle = Math.round(85 + (x / stickRadius) * 35);   // 50 to 120
+    // calculate raw throttle value
+
+    const maxZone = 0.8; // when stick is 80% out, consider it max throttle
+    let throttlePercent = y / stickRadius; // -1 to +1
+    let throttle;
+    
+    // if in max zone, set to max value, otherwise scale more aggressively
+    if (Math.abs(throttlePercent) > maxZone) {
+        throttle = Math.sign(throttlePercent) * 255;
+    } else {
+        // scale remaining range (0 to maxZone) to full throttle range
+        throttle = Math.round((throttlePercent / maxZone) * 255);
+    }
+
+    let steerAngle = Math.round(90 + (x / stickRadius) * 35);   // 50 to 120
+
+    // force joystick center at 90 degrees (car is straight)
+    // 3px tolerance from center (stick jitter still counts as center)
+    const centerTolerance = 3; // pixels
+    if (Math.abs(x) <= centerTolerance && Math.abs(y) <= centerTolerance) {
+        steerAngle = 90;
+    }
 
     // send values to car via websocket as json
     ws.send(JSON.stringify({ throttle, steerAngle }));
