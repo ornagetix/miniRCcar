@@ -150,10 +150,10 @@ void setThrottle(int speed) {
 }
 
 // sets the servo/steering angle
+// angle range: 50 to 120
 void setAngle(int angle) {
-  int neoangle = map(angle, 0, 180, 50, 120); // map angle to steering angle range (50 to 120)
-  if (neoangle >= 50 && neoangle <= 120) {
-    servo.write(neoangle);
+  if (angle >= 50 && angle <= 120) {
+    servo.write(angle);
   } else {
     Serial.println("invalid angle");
   }
