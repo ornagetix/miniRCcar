@@ -17,8 +17,8 @@ let centerY = rect.height / 2;
 
 // convert joystick x,y into throttle + steering
 function sendCommand(x, y) {
-    let throttle = Math.round((y / stickRadius) * 255);  // -255 to +255
-    let steerAngle = Math.round(85 + (x / stickRadius) * 35);   // 50 to 120
+    let throttle = Math.round((y / stickRadius) * 255); // -255 to +255
+    let steerAngle = Math.round(90 + (x / stickRadius) * 35); // 50 to 120 (center 90)
 
     // send values to car via websocket as json
     ws.send(JSON.stringify({ throttle, steerAngle }));
