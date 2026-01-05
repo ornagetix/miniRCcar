@@ -76,7 +76,7 @@ The following diagram shows all electrical connections between the ESP32-C3, mot
 ├── src/            # Firmware source code
 ├── include/        # Header files
 ├── data/           # Web server files (HTML/CSS/JS)
-├── images/           # Wiring diagrams, images, and screenshots
+├── images/         # Wiring diagrams, images, and screenshots
 ├── platformio.ini  # Build configuration
 └── README.md
 ```
