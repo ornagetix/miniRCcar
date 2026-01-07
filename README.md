@@ -50,11 +50,11 @@ The system consists of three primary layers:
 
 - Microcontroller: seeed studio XIAO ESP32-C3
 - Chassis: Modified Hot Wheels car (Volkswagen Golf Mk7)
-    - Body is 3D printed
-- Drive Motor: Modified N20 DC brushed motor
-- Steering: Micro linear servo
+    - Chassis is modified from Hot Wheels car, body is 3D printed
+- Drive Motor: Dual-shaft N20 DC brushed motor
+- Steering: AGFRC C1.5CLS micro linear servo
 - Motor Driver: *DRV8833* (breakout board)
-- Power: Lithium-polymer battery (55mAh)
+- Power: 55mAh lithium-polymer battery (3.7V)
 
 ## Wiring Diagram
 
